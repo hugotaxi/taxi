@@ -1,939 +1,404 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hugo Táxi - Serviço de Transporte em Vitória da Conquista</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Arial', sans-serif;
-        }
-        
-        body {
-            background-color: #f5f5f5;
-            color: #333;
-        }
-        
-        .hero {
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-start;
-            align-items: center;
-            text-align: center;
-            background-image: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url('https://i.postimg.cc/Wsw-dY7w5/ggf.jpg');
-            background-size: cover;
-            background-position: center;
-            color: white;
-            padding-top: 40px;
-            position: relative;
-        }
-        
-        nav {
-            display: flex;
-            justify-content: space-around;
-            width: 100%;
-            max-width: 800px;
-            padding: 20px 0;
-            margin-bottom: 100px;
-        }
-        
-        nav a {
-            text-decoration: none;
-            color: white;
-            font-weight: bold;
-            text-transform: uppercase;
-            font-size: 14px;
-            letter-spacing: 1px;
-            padding: 5px 10px;
-            transition: opacity 0.3s;
-        }
-        
-        nav a:hover {
-            opacity: 0.8;
-        }
-        
-        .hero-content {
-            margin-top: auto;
-            margin-bottom: 150px;
-        }
-        
-        .hero h1 {
-            font-size: 14px;
-            letter-spacing: 2px;
-            margin-bottom: 20px;
-            text-transform: uppercase;
-        }
-        
-        .hero h2 {
-            font-size: 48px;
-            margin-bottom: 30px;
-            font-weight: normal;
-        }
-        
-        .btn {
-            padding: 12px 30px;
-            background-color: transparent;
-            color: white;
-            border: 2px solid white;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        
-        .btn:hover {
-            background-color: white;
-            color: #333;
-        }
-
-        /* Modal Styles */
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0,0,0,0.8);
-            overflow: auto;
-        }
-
-        .modal-content {
-            background-color: #fefefe;
-            margin: 5% auto;
-            padding: 30px;
-            border-radius: 8px;
-            width: 90%;
-            max-width: 700px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-            position: relative;
-        }
-
-        .close {
-            position: absolute;
-            top: 15px;
-            right: 25px;
-            font-size: 28px;
-            font-weight: bold;
-            color: #aaa;
-            cursor: pointer;
-        }
-
-        .close:hover {
-            color: #333;
-        }
-
-        .modal-header {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        .modal-header h2 {
-            color: #2c3e50;
-            font-size: 28px;
-        }
-
-        .modal-body {
-            line-height: 1.6;
-            color: #555;
-        }
-
-        .modal-body p {
-            margin-bottom: 15px;
-        }
-
-        .highlight {
-            color: #2c3e50;
-            font-weight: bold;
-        }
-
-        /* Carousel Styles */
-        .carousel {
-            position: relative;
-            width: 100%;
-            height: 250px;
-            margin: 20px 0;
-            overflow: hidden;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-        }
-
-        .carousel-inner {
-            position: relative;
-            width: 100%;
-            height: 100%;
-        }
-
-        .carousel-item {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            opacity: 0;
-            transition: opacity 1s ease-in-out;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background-color: #f5f5f5;
-        }
-
-        .carousel-item.active {
-            opacity: 1;
-        }
-
-        .carousel-item img {
-            max-width: 100%;
-            max-height: 100%;
-            object-fit: contain;
-        }
-
-        .carousel-indicators {
-            position: absolute;
-            bottom: 10px;
-            left: 50%;
-            transform: translateX(-50%);
-            display: flex;
-            gap: 8px;
-            z-index: 10;
-        }
-
-        .indicator {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            background-color: rgba(255,255,255,0.5);
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-
-        .indicator.active {
-            background-color: white;
-        }
-
-        /* Pricing Section Styles */
-        #precos {
-            padding: 80px 20px;
-            background-color: #fff;
-            text-align: center;
-        }
-
-        .section-title {
-            margin-bottom: 50px;
-        }
-
-        .section-title h2 {
-            font-size: 36px;
-            color: #333;
-            position: relative;
-            display: inline-block;
-            padding-bottom: 15px;
-        }
-
-        .section-title h2::after {
-            content: '';
-            position: absolute;
-            width: 60px;
-            height: 2px;
-            background-color: #333;
-            bottom: 0;
-            left: 50%;
-            transform: translateX(-50%);
-        }
-
-        .pricing {
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-            gap: 30px;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .price-card {
-            background-color: #f9f9f9;
-            border-radius: 8px;
-            padding: 30px;
-            width: 100%;
-            max-width: 350px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            transition: transform 0.3s ease;
-        }
-
-        .price-card:hover {
-            transform: translateY(-10px);
-        }
-
-        .price-card h3 {
-            font-size: 22px;
-            margin-bottom: 20px;
-            color: #333;
-        }
-
-        .price-card .price {
-            font-size: 28px;
-            font-weight: bold;
-            color: #2c3e50;
-            margin-bottom: 25px;
-        }
-
-        .price-card ul {
-            list-style: none;
-            margin-bottom: 30px;
-            text-align: left;
-        }
-
-        .price-card ul li {
-            padding: 8px 0;
-            border-bottom: 1px solid #eee;
-            color: #555;
-        }
-
-        .price-card ul li:last-child {
-            border-bottom: none;
-        }
-
-        .price-card .btn {
-            background-color: #2c3e50;
-            color: white;
-            border: none;
-            width: 100%;
-            padding: 12px;
-            font-size: 16px;
-        }
-
-        .price-card .btn:hover {
-            background-color: #1a252f;
-        }
-
-        /* Services Section Styles */
-        #servicos {
-            padding: 80px 20px;
-            background-color: #f9f9f9;
-            text-align: center;
-        }
-
-        .services {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 30px;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .service-card {
-            background-color: white;
-            border-radius: 8px;
-            padding: 30px;
-            width: 100%;
-            max-width: 350px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-            transition: all 0.3s ease;
-        }
-
-        .service-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-        }
-
-        .service-card img {
-            margin-bottom: 20px;
-            object-fit: contain;
-        }
-
-        .service-card h3 {
-            font-size: 20px;
-            margin-bottom: 15px;
-            color: #2c3e50;
-        }
-
-        .service-card p {
-            color: #555;
-            line-height: 1.6;
-        }
-
-        /* Testimonials Section Styles */
-        #depoimentos {
-            padding: 80px 20px;
-            background-color: #fff;
-            text-align: center;
-        }
-
-        .testimonials {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 30px;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .testimonial-card {
-            background-color: #f9f9f9;
-            border-radius: 8px;
-            padding: 30px;
-            width: 100%;
-            max-width: 350px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-            position: relative;
-        }
-
-        .testimonial-card p {
-            font-style: italic;
-            color: #555;
-            line-height: 1.6;
-            margin-bottom: 20px;
-        }
-
-        .testimonial-card .client {
-            font-weight: bold;
-            color: #2c3e50;
-        }
-
-        /* Contact Section Styles */
-        #contato {
-            padding: 80px 20px;
-            background-color: #2c3e50;
-            color: white;
-            text-align: center;
-        }
-
-        #contato .section-title h2 {
-            color: white;
-        }
-
-        #contato .section-title h2::after {
-            background-color: white;
-        }
-
-        .contact-info-section {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 15px;
-            max-width: 1100px;
-            margin: 0 auto;
-        }
-
-        .contact-card {
-            background-color: rgba(255,255,255,0.1);
-            border-radius: 8px;
-            padding: 20px;
-            width: 100%;
-            max-width: 240px;
-            min-height: 180px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .contact-card:hover {
-            background-color: rgba(255,255,255,0.2);
-            transform: translateY(-5px);
-        }
-
-        .contact-card h3 {
-            font-size: 18px;
-            margin-bottom: 15px;
-        }
-
-        .contact-card p {
-            line-height: 1.4;
-            font-size: 14px;
-            margin-bottom: 8px;
-        }
-
-        /* Form Modal Styles */
-        .form-modal {
-            display: none;
-            position: fixed;
-            z-index: 1000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0,0,0,0.8);
-            overflow: auto;
-        }
-
-        .form-content {
-            background-color: #fefefe;
-            margin: 5% auto;
-            padding: 30px;
-            border-radius: 8px;
-            width: 90%;
-            max-width: 500px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-        }
-
-        .form-header {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        .form-header h2 {
-            color: #2c3e50;
-            font-size: 24px;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: bold;
-            color: #2c3e50;
-        }
-
-        .form-group input,
-        .form-group select,
-        .form-group textarea {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            font-size: 16px;
-        }
-
-        .form-group textarea {
-            height: 100px;
-            resize: vertical;
-        }
-
-        .form-submit {
-            background-color: #2c3e50;
-            color: white;
-            border: none;
-            padding: 12px 20px;
-            width: 100%;
-            font-size: 16px;
-            cursor: pointer;
-            border-radius: 4px;
-            transition: background-color 0.3s;
-        }
-
-        .form-submit:hover {
-            background-color: #1a252f;
-        }
-
-        .service-type {
-            font-weight: bold;
-            color: #2c3e50;
-            margin-bottom: 20px;
-            padding: 10px;
-            background-color: #f5f5f5;
-            border-radius: 4px;
-            text-align: center;
-        }
-
-        @media (max-width: 768px) {
-            .contact-info-section {
-                flex-direction: column;
-                align-items: center;
-            }
-            
-            .contact-card {
-                max-width: 100%;
-                width: 90%;
-            }
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <title>Firebase Relay Control Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background-color: #f9f9f9;
+      margin: 0;
+      padding: 0 10px 40px;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      justify-content: space-between;
+    }
+    h1 {
+      margin-top: 30px;
+      font-size: 1.8rem;
+    }
+    .relay-card {
+      display: inline-block;
+      background-color: white;
+      padding: 20px;
+      margin: 15px;
+      border-radius: 15px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      width: 220px;
+      vertical-align: top;
+    }
+    .relay-card h2 {
+      margin-bottom: 10px;
+      font-size: 1.3rem;
+    }
+    .relay-card p {
+      margin-bottom: 10px;
+      font-size: 1rem;
+    }
+    .relay-card button {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 10px;
+      color: white;
+      background-color: blue;
+      cursor: pointer;
+      font-size: 16px;
+      width: 90%;
+      transition: opacity 0.3s ease;
+    }
+    .relay-card button:hover {
+      opacity: 0.8;
+    }
+    #allOffBtn, #logoutBtn {
+      max-width: 300px;
+      width: 90%;
+      padding: 12px 25px;
+      font-size: 16px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      margin: 15px auto;
+      display: block;
+      color: white;
+      transition: opacity 0.3s ease;
+    }
+    #allOffBtn {
+      background-color: #d32f2f;
+    }
+    #allOffBtn:hover {
+      opacity: 0.8;
+    }
+    #logoutBtn {
+      background-color: #555;
+    }
+    #logoutBtn:hover {
+      opacity: 0.8;
+    }
+    #dashboard {
+      display: none;
+    }
+    #loginForm {
+      max-width: 400px;
+      margin: 80px auto 20px;
+      background: white;
+      padding: 30px 20px;
+      border-radius: 15px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+    #loginForm input {
+      width: 100%;
+      padding: 12px 15px;
+      margin: 10px 0 20px;
+      font-size: 1rem;
+      border: 1.5px solid #ccc;
+      border-radius: 10px;
+      box-sizing: border-box;
+      outline-offset: 2px;
+      transition: border-color 0.3s ease;
+    }
+    #loginForm input:focus {
+      border-color: #1e88e5;
+    }
+    #loginForm button {
+      width: 100%;
+      background-color: #1e88e5;
+      color: white;
+      padding: 12px;
+      font-size: 18px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    #loginForm button:hover {
+      background-color: #1565c0;
+    }
+    #dashboard .relay-container {
+      max-width: 960px;
+      margin: 20px auto 0;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    @media (max-width: 700px) {
+      .relay-card {
+        width: 90%;
+        margin: 10px auto;
+        display: block;
+      }
+      body {
+        padding: 0 10px 60px;
+      }
+    }
+    footer {
+      font-size: 0.9rem;
+      color: #666;
+      padding: 10px 0;
+      margin-top: 40px;
+    }
+    .loading {
+      display: none;
+      margin: 50px auto;
+      font-size: 1.2rem;
+      color: #555;
+    }
+    .notification {
+      position: fixed;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: #4CAF50;
+      color: white;
+      padding: 15px;
+      border-radius: 5px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      z-index: 1000;
+      display: none;
+    }
+  </style>
 </head>
 <body>
-    <!-- About Modal -->
-    <div id="aboutModal" class="modal">
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <div class="modal-header">
-                <h2>Sobre Hugo - Profissional Taxista</h2>
-            </div>
-            <div class="modal-body">
-                <!-- Carousel -->
-                <div class="carousel">
-                    <div class="carousel-inner">
-                        <div class="carousel-item active">
-                            <img src="https://res.cloudinary.com/victorhugo/image/upload/v1676419802/2_yqljjv.jpg" alt="Taxi moderno">
-                        </div>
-                        <div class="carousel-item">
-                            <img src="https://res.cloudinary.com/victorhugo/image/upload/v1676419801/3_ka14ex.jpg" alt="Interior do taxi">
-                        </div>
-                        <div class="carousel-item">
-                            <img src="https://res.cloudinary.com/victorhugo/image/upload/v1676419802/4_tkdnas.jpg" alt="Taxi na estrada">
-                        </div>
-                        <div class="carousel-item">
-                            <img src="https://res.cloudinary.com/victorhugo/image/upload/v1676419801/1_fqiddq.jpg" alt="Taxi no aeroporto">
-                        </div>
-                        <div class="carousel-item">
-                            <img src="https://www.autodemolidorasinos.com.br/arquivos/produtos/fiat-grand-siena-2014-2015-14-8v-flex-88cv-cambio-manual-2-1599668508.jpg" alt="Motorista profissional">
-                        </div>
-                    </div>
-                    <div class="carousel-indicators">
-                        <div class="indicator active" data-slide-to="0"></div>
-                        <div class="indicator" data-slide-to="1"></div>
-                        <div class="indicator" data-slide-to="2"></div>
-                        <div class="indicator" data-slide-to="3"></div>
-                        <div class="indicator" data-slide-to="4"></div>
-                    </div>
-                </div>
 
-                <p>Olá, sou <span class="highlight">Hugo</span>, um taxista profissional com mais de <span class="highlight">5 anos de experiência</span> no transporte de passageiros em Vitória da Conquista e região.</p>
-                
-                <p>Minha missão é proporcionar <span class="highlight">conforto, segurança e pontualidade</span> em todos os meus serviços, seja para viagens urbanas, intermunicipais ou transporte rural.</p>
-                
-                <p>Alguns dos meus diferenciais:</p>
-                <ul>
-                    <li>Veículo moderno, limpo e bem conservado</li>
-                    <li>Conhecimento detalhado das rotas da região</li>
-                    <li>Atendimento personalizado e cordial</li>
-                    <li>Pontualidade e compromisso com horários</li>
-                    <li>Preços justos e transparentes</li>
-                </ul>
-                
-                <p>Estou disponível 24 horas para atendimento de emergência e com agendamento prévio para garantir sua comodidade.</p>
-                
-                <p>Meu compromisso é fazer com que cada viagem seja uma experiência <span class="highlight">segura, confortável e agradável</span> para todos os meus passageiros.</p>
-            </div>
-        </div>
+  <div class="notification" id="notification"></div>
+
+  <h1>Firebase Relay Control Dashboard</h1>
+
+  <div class="loading" id="loading">Carregando...</div>
+
+  <!-- Login form -->
+  <div id="loginForm">
+    <input type="email" id="email" placeholder="Enter Email" required />
+    <input type="password" id="password" placeholder="Enter Password" required />
+    <button id="loginBtn">Login</button>
+  </div>
+
+  <!-- Dashboard -->
+  <div id="dashboard">
+    <div class="relay-container">
+      <div class="relay-card">
+        <h2>Portão</h2>
+        <p>Status: <span id="status1">Loading...</span></p>
+        <button id="btn1">Acionar</button>
+      </div>
+
+      <div class="relay-card">
+        <h2>        </h2>
+        <p>Status: <span id="status3">Loading...</span></p>
+        <button id="btn3">        </button>
+      </div>
+
+     <div class="relay-card">
+        <h2>Led Cian</h2>
+        <p>Status: <span id="status2">Loading...</span></p>
+        <button id="btn2">Inverter</button>
+      </div>
+
+      <div class="relay-card">
+        <h2>            </h2>
+        <p>         <span id="status4">Loading...</span></p>
+        <button id="btn4">           </button>
+      </div>
     </div>
 
-    <!-- Form Modal -->
-    <div id="formModal" class="form-modal">
-        <div class="form-content">
-            <span class="close" onclick="closeFormModal()">&times;</span>
-            <div class="form-header">
-                <h2>Solicitar Serviço</h2>
-                <div class="service-type" id="serviceTypeDisplay">Serviço: Táxi Urbano</div>
-            </div>
-            <form id="serviceForm">
-                <div class="form-group">
-                    <label for="name">Nome completo:</label>
-                    <input type="text" id="name" name="name" required>
-                </div>
-                <div class="form-group">
-                    <label for="phone">Telefone:</label>
-                    <input type="tel" id="phone" name="phone" required>
-                </div>
-                <div class="form-group">
-                    <label for="origin">Local de Partida:</label>
-                    <input type="text" id="origin" name="origin" required>
-                </div>
-                <div class="form-group">
-                    <label for="destination">Destino:</label>
-                    <input type="text" id="destination" name="destination" required>
-                </div>
-                <div class="form-group">
-                    <label for="date">Data:</label>
-                    <input type="date" id="date" name="date" required>
-                </div>
-                <div class="form-group">
-                    <label for="time">Hora:</label>
-                    <input type="time" id="time" name="time" required>
-                </div>
-                <div class="form-group">
-                    <label for="notes">Observações (opcional):</label>
-                    <textarea id="notes" name="notes"></textarea>
-                </div>
-                <input type="hidden" id="serviceType" name="serviceType" value="Táxi Urbano">
-                <button type="button" class="form-submit" onclick="submitForm()">Enviar para WhatsApp</button>
-            </form>
-        </div>
-    </div>
+    <button id="allOffBtn">Desativar</button>
+    <button id="logoutBtn">Logout</button>
+  </div>
 
-    <section class="hero">
-        <nav>
-            <a href="#" id="aboutLink">Sobre</a>
-            <a href="#servicos">Serviços</a>
-            <a href="#precos">Preços</a>
-            <a href="orçamento.html">Orçamento</a>
-            <a href="#contato">Contato</a>
-        </nav>
+  <footer>
+    Created by Tech StudyCell
+  </footer>
+
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-database-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
+
+  <script>
+    // Firebase config
+    const firebaseConfig = {
+      apiKey: "AIzaSyDZveB-Y_Wxwd3vjhktn4fFMqu2vR1t6no",
+      authDomain: "esp01-82993.firebaseapp.com",
+      databaseURL: "https://esp01-82993-default-rtdb.firebaseio.com",
+      projectId: "esp01-82993",
+      storageBucket: "esp01-82993.firebasestorage.app",
+      messagingSenderId: "9720123463",
+      appId: "1:9720123463:web:1b1ff85a2c17b2f35d2162"
+    };
+
+    // Initialize Firebase
+    try {
+      firebase.initializeApp(firebaseConfig);
+    } catch (error) {
+      console.error("Firebase initialization error:", error);
+    }
+
+    // Credenciais pré-definidas
+    const PREDEFINED_EMAIL = "victor22pac@gmail.com";
+    const PREDEFINED_PASSWORD = "88331234";
+
+    // Elementos da página
+    const loginForm = document.getElementById("loginForm");
+    const dashboard = document.getElementById("dashboard");
+    const loginBtn = document.getElementById("loginBtn");
+    const loading = document.getElementById("loading");
+    const notification = document.getElementById("notification");
+
+    // Função para verificar parâmetro na URL
+    function checkUrlParameter() {
+      const urlParams = new URLSearchParams(window.location.search);
+      if (urlParams.has('portao')) {
+        toggleRelay1();
+      }
+    }
+
+    // Função para mostrar notificação
+    function showNotification(message, isSuccess = true) {
+      notification.textContent = message;
+      notification.style.backgroundColor = isSuccess ? '#4CAF50' : '#f44336';
+      notification.style.display = 'block';
+      
+      setTimeout(() => {
+        notification.style.display = 'none';
+      }, 3000);
+    }
+
+    // Função para alternar o Relay1
+    function toggleRelay1() {
+      const relayRef = firebase.database().ref("/relay1");
+      
+      relayRef.get().then(snap => {
+        const currentState = snap.val();
+        const newState = !currentState;
         
-        <div class="hero-content">
-            <h1>Oferecemos o melhor serviço de táxi da cidade com motorista experiente e veículo confortável para todas as suas necessidades de transporte.</h1>
-            <h2>Hugo Táxi</h2>
-            <button class="btn" id="whatsappBtn">Whatsapp</button>
-        </div>
-    </section>
+        relayRef.set(newState)
+          .then(() => {
+            showNotification(`Portão foi ${newState ? 'aberto' : 'fechado'}`);
+          })
+          .catch(error => {
+            console.error("Error updating relay1:", error);
+          });
+      }).catch(error => {
+        console.error("Error reading relay1 state:", error);
+      });
+    }
 
-    <section id="servicos">
-        <div class="section-title">
-            <h2>Nossos Serviços</h2>
-        </div>
-        
-        <div class="services">
-            <div class="service-card">
-                <img src="https://i.ibb.co/F4GWB6k4/calendar.png" alt="Ícone de transporte de aeroporto" style="width: 80px; height: 80px;">
-                <h3>Agendamentos</h3>
-                <p>Além da certeza de chegar no horário e a possibilidade de planejamento com antecedência, evitando correria.</p>
-            </div>
+    // Função para iniciar o controle dos relés
+    function startRelayControl() {
+      const db = firebase.database();
 
-            <div class="service-card">
-                <img src="https://i.ibb.co/d0cwt0FM/booking.png" alt="Ícone de transporte de aeroporto" style="width: 80px; height: 80px;">
-                <h3>Encomendas</h3>
-                <p>Enviar para múltiplos destinos com confiança que sua mercadoria chegará.</p>
-            </div>
+      const relays = [
+        { id: 1, path: "relay1" },
+        { id: 2, path: "relay2" },
+        { id: 3, path: "relay3" },
+        { id: 4, path: "relay4" },
+      ];
 
-            <div class="service-card">
-                <img src="https://i.ibb.co/gMGrYyrt/road.png" alt="Ícone de transporte executivo" style="width: 80px; height: 80px;">
-                <h3>Transporte Rural</h3>
-                <p>Serviço premium para locais com dificuldades em transportes públicos.</p>
-            </div>
-    
-            <div class="service-card">
-                <img src="https://i.ibb.co/5hwY2hrm/transfer.png" alt="Ícone de transporte de aeroporto" style="width: 80px; height: 80px;">
-                <h3>Transporte de Aeroporto</h3>
-                <p>Busca e entrega no aeroporto com pontualidade e conforto garantidos.</p>
-            </div>
+      relays.forEach(relay => {
+        const statusText = document.getElementById(`status${relay.id}`);
+        const toggleButton = document.getElementById(`btn${relay.id}`);
+        const relayRef = db.ref("/" + relay.path);
 
-            <div class="service-card">
-                <img src="https://i.ibb.co/vvwfDDMC/taxi.png" alt="Ícone de táxi urbano" style="width: 80px; height: 80px;">
-                <h3>Táxi Urbano</h3>
-                <p>Transporte rápido e seguro dentro da cidade, com tarifas justas e transparentes.</p>
-            </div>
-
-            <div class="service-card">
-                <img src="https://i.ibb.co/N2qgHZkk/destination-1.png" alt="Ícone de viagens intermunicipais" style="width: 80px; height: 80px;">
-                <h3>Viagens Intermunicipais</h3>
-                <p>Serviço de táxi para viagens entre cidades com conforto e segurança.</p>
-            </div>
-        </div>
-    </section>
-
-    <section id="precos">
-        <div class="section-title">
-            <h2>Nossos Preços</h2>
-        </div>
-        <div class="pricing">
-            <div class="price-card">
-                <h3>Táxi Urbano</h3>
-                <div class="price">R$2,50/km</div>
-                <ul>
-                    <li>Bandeirada: R$4,20</li>
-                    <li>Hora parada: R$30,00</li>
-                    <li>Tarifa mínima: R$8,00</li>
-                    <li>Wi-Fi a bordo</li>
-                </ul>
-                <button class="btn solicitar-btn" data-service="Táxi Urbano">Solicitar</button>
-            </div>
-            <div class="price-card">
-                <h3>Viagens Intermunicipais</h3>
-                <div class="price">R$3,00/km</div>
-                <ul>
-                    <li>Preço fixo por destino</li>
-                    <li>Espera de até 2 horas</li>
-                    <li>Bagagem: Grátis</li>
-                    <li>Ar-condicionado incluso</li>
-                </ul>
-                <button class="btn solicitar-btn" data-service="Viagens Intermunicipais">Solicitar</button>
-            </div>
-            <div class="price-card">
-                <h3>Transporte Rural</h3>
-                <div class="price">R$4,00/km</div>
-                <ul>
-                    <li>Espera de até 3 Horas</li>
-                    <li>Ar-condicionado incluso</li>
-                    <li>Água e amenidades</li>
-                    <li>Bagagem: Grátis</li>
-                </ul>
-                <button class="btn solicitar-btn" data-service="Transporte Rural">Solicitar</button>
-            </div>
-        </div>
-    </section>
-
-    <section id="depoimentos">
-        <div class="section-title">
-            <h2>Depoimentos</h2>
-        </div>
-        <div class="testimonials">
-            <div class="testimonial-card">
-                <p>"Serviço excelente! O motorista foi muito pontual e educado. O carro estava limpo e confortável. Recomendo a todos."</p>
-                <div class="client">- Catarina Pereira</div>
-            </div>
-            <div class="testimonial-card">
-                <p>"Uso o serviço de Hugo há 1 ano e nunca tive problemas. Os preços são justos e o motorista excelente profissional."</p>
-                <div class="client">- Kleber Santos</div>
-            </div>
-            <div class="testimonial-card">
-                <p>"Precisei de um táxi urgente para o aeroporto e Hugo não me decepcionou. Chegou em poucos minutos e me levou com segurança."</p>
-                <div class="client">- Elizângela Oliveira</div>
-            </div>
-        </div>
-    </section>
-
-    <section id="contato">
-        <div class="section-title">
-            <h2>Entre em Contato</h2>
-        </div>
-        <div class="contact-info-section">
-            <div class="contact-card" onclick="window.location.href='tel:77988331234'">
-                <h3>Telefone</h3>
-                <p>(77) 98833-1234</p>
-                <p style="color: #FFDE59; margin-top: 10px;">Ligar</p>
-            </div>
-            <div class="contact-card" onclick="window.open('https://wa.me/77988331234', '_blank')">
-                <h3>WhatsApp</h3>
-                <p>Atendimento rápido</p>
-                <p>pelo WhatsApp</p>
-                <p style="color: #FFDE59; margin-top: 10px;">Enviar mensagem</p>
-            </div>
-            <div class="contact-card" onclick="window.open('https://www.google.com/maps/place//@-14.8616841,-40.8221761,15z?entry=ttu&g_ep=EgoyMDI1MDUwNy4wIKXMDSoASAFQAw%3D%3D', '_blank')">
-                <h3>Feedback</h3>
-                <p>Seu feedback é</p>
-                <p>muito importante</p>
-                <p style="color: #FFDE59; margin-top: 10px;">Avaliar</p>
-            </div>
-            <div class="contact-card" onclick="window.open('https://www.google.com/maps/place//@-14.8616841,-40.8221761,15z?entry=ttu&g_ep=EgoyMDI1MDUwNy4wIKXMDSoASAFQAw%3D%3D', '_blank')">
-                <h3>Endereço</h3>
-                <p>Av. Olivia Flores</p>
-                <p>Vitória da Conquista</p>
-                <p style="color: #FFDE59; margin-top: 10px;">Ver no mapa</p>
-            </div>
-        </div>
-    </section>
-
-    <script>
-        // Modal functionality
-        const modal = document.getElementById("aboutModal");
-        const btn = document.getElementById("aboutLink");
-        const span = document.getElementsByClassName("close")[0];
-
-        btn.onclick = function(e) {
-            e.preventDefault();
-            modal.style.display = "block";
-        }
-
-        span.onclick = function() {
-            modal.style.display = "none";
-        }
-
-        window.onclick = function(event) {
-            if (event.target == modal) {
-                modal.style.display = "none";
-            }
-        }
-
-        // WhatsApp button functionality
-        document.getElementById("whatsappBtn").addEventListener("click", function() {
-            const phoneNumber = "77988331234";
-            const message = "Olá gostaria de solicitar uma corrida";
-            const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
-            window.open(whatsappUrl, "_blank");
+        relayRef.on("value", (snapshot) => {
+          const state = snapshot.val();
+          statusText.innerText = state ? "ON" : "OFF";
+          toggleButton.style.backgroundColor = state ? "green" : "blue";
         });
 
-        // Carousel functionality
-        let currentSlide = 0;
-        const slides = document.querySelectorAll('.carousel-item');
-        const indicators = document.querySelectorAll('.indicator');
-        const totalSlides = slides.length;
+        toggleButton.onclick = () => {
+          relayRef.get().then(snap => {
+            relayRef.set(!snap.val());
+          });
+        };
+      });
 
-        function showSlide(index) {
-            // Hide all slides
-            slides.forEach(slide => {
-                slide.classList.remove('active');
-            });
-            indicators.forEach(indicator => {
-                indicator.classList.remove('active');
-            });
-            
-            // Show the selected slide
-            slides[index].classList.add('active');
-            indicators[index].classList.add('active');
-            currentSlide = index;
-        }
-
-        function nextSlide() {
-            currentSlide = (currentSlide + 1) % totalSlides;
-            showSlide(currentSlide);
-        }
-
-        // Initialize carousel
-        showSlide(0);
-        setInterval(nextSlide, 5000); // Change slide every 5 seconds
-
-        // Add click event to indicators
-        indicators.forEach((indicator, index) => {
-            indicator.addEventListener('click', () => {
-                showSlide(index);
-            });
+      document.getElementById("allOffBtn").onclick = () => {
+        relays.forEach(relay => {
+          db.ref("/" + relay.path).set(false);
         });
+        showNotification("Todos os relés foram desligados");
+      };
+    }
 
-        // Form Modal functionality
-        const formModal = document.getElementById("formModal");
-        const solicitarBtns = document.querySelectorAll(".solicitar-btn");
-        const serviceTypeDisplay = document.getElementById("serviceTypeDisplay");
-        const serviceTypeInput = document.getElementById("serviceType");
-
-        function openFormModal(service) {
-            serviceTypeDisplay.textContent = `Serviço: ${service}`;
-            serviceTypeInput.value = service;
-            formModal.style.display = "block";
-        }
-
-        function closeFormModal() {
-            formModal.style.display = "none";
-        }
-
-        function submitForm() {
-            const name = document.getElementById("name").value;
-            const phone = document.getElementById("phone").value;
-            const origin = document.getElementById("origin").value;
-            const destination = document.getElementById("destination").value;
-            const date = document.getElementById("date").value;
-            const time = document.getElementById("time").value;
-            const notes = document.getElementById("notes").value;
-            const serviceType = serviceTypeInput.value;
-
-            // Format the date to DD/MM/YYYY
-            const formattedDate = date.split('-').reverse().join('/');
-            
-            // Format the WhatsApp message
-            let message = `Olá Hugo, gostaria de solicitar um serviço de ${serviceType}.\n\n`;
-            message += `*Nome:* ${name}\n`;
-            message += `*Telefone:* ${phone}\n`;
-            message += `*Local de Partida:* ${origin}\n`;
-            message += `*Destino:* ${destination}\n`;
-            message += `*Data:* ${formattedDate}\n`;
-            message += `*Hora:* ${time}\n`;
-            
-            if (notes) {
-                message += `*Observações:* ${notes}\n`;
-            }
-            
-            message += `\nPor favor, confirme o agendamento. Obrigado!`;
-            
-            // Encode the message for URL
-            const encodedMessage = encodeURIComponent(message);
-            
-            // Open WhatsApp with the pre-filled message
-            window.open(`https://wa.me/77988331234?text=${encodedMessage}`, '_blank');
-            
-            // Close the modal
-            closeFormModal();
-        }
-
-        // Add click event to all "Solicitar" buttons
-        solicitarBtns.forEach(btn => {
-            btn.addEventListener('click', function() {
-                const service = this.getAttribute('data-service');
-                openFormModal(service);
-            });
+    // Função para login automático
+    function autoLogin() {
+      firebase.auth().signInWithEmailAndPassword(PREDEFINED_EMAIL, PREDEFINED_PASSWORD)
+        .then(userCredential => {
+          console.log("Autenticado como", userCredential.user.email);
+          loading.style.display = "none";
+          loginForm.style.display = "none";
+          dashboard.style.display = "block";
+          startRelayControl();
+          checkUrlParameter(); // Verifica parâmetro na URL após login
+        })
+        .catch(error => {
+          console.error("Login automático falhou:", error.message);
+          loading.style.display = "none";
+          loginForm.style.display = "block";
+          document.getElementById("email").value = PREDEFINED_EMAIL;
+          document.getElementById("password").value = PREDEFINED_PASSWORD;
         });
+    }
 
-        // Close modal when clicking outside
-        window.addEventListener('click', function(event) {
-            if (event.target == formModal) {
-                closeFormModal();
-            }
+    // Tentar login automático quando o Firebase estiver pronto
+    firebase.auth().onAuthStateChanged(user => {
+      if (user) {
+        // Já está logado
+        loading.style.display = "none";
+        loginForm.style.display = "none";
+        dashboard.style.display = "block";
+        startRelayControl();
+        checkUrlParameter(); // Verifica parâmetro na URL
+      } else {
+        // Não está logado, tentar login automático
+        autoLogin();
+      }
+    });
+
+    // Configurar o botão de login manual (fallback)
+    loginBtn.addEventListener("click", () => {
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value;
+
+      if (!email || !password) {
+        showNotification("Por favor, insira email e senha.", false);
+        return;
+      }
+
+      loading.style.display = "block";
+      loginForm.style.display = "none";
+
+      firebase.auth().signInWithEmailAndPassword(email, password)
+        .then(userCredential => {
+          loading.style.display = "none";
+          loginForm.style.display = "none";
+          dashboard.style.display = "block";
+          startRelayControl();
+          checkUrlParameter(); // Verifica parâmetro na URL após login
+        })
+        .catch(error => {
+          loading.style.display = "none";
+          loginForm.style.display = "block";
+          showNotification("Login falhou: " + error.message, false);
         });
+    });
 
-        // Set min date to today
-        document.getElementById('date').min = new Date().toISOString().split('T')[0];
-    </script>
+    // Configurar o botão de logout
+    document.getElementById("logoutBtn").onclick = () => {
+      firebase.auth().signOut()
+        .then(() => {
+          dashboard.style.display = "none";
+          loginForm.style.display = "block";
+          document.getElementById("email").value = PREDEFINED_EMAIL;
+          document.getElementById("password").value = PREDEFINED_PASSWORD;
+          showNotification("Logout realizado com sucesso");
+        })
+        .catch(error => {
+          showNotification("Logout falhou: " + error.message, false);
+        });
+    };
+  </script>
 </body>
 </html>
