@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>North Lake</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+        
+        body {
+            background-color: #f5f5f5;
+            color: #333;
+        }
+        
+        .hero {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+            text-align: center;
+            background-image: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url('https://images.unsplash.com/photo-1476231682828-37e571bc172f?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            padding-top: 40px;
+            position: relative;
+        }
+        
+        nav {
+            display: flex;
+            justify-content: space-around;
+            width: 100%;
+            max-width: 800px;
+            padding: 20px 0;
+            margin-bottom: 100px;
+        }
+        
+        nav a {
+            text-decoration: none;
+            color: white;
+            font-weight: bold;
+            text-transform: uppercase;
+            font-size: 14px;
+            letter-spacing: 1px;
+            padding: 5px 10px;
+            transition: opacity 0.3s;
+        }
+        
+        nav a:hover {
+            opacity: 0.8;
+        }
+        
+        .hero-content {
+            margin-top: auto;
+            margin-bottom: 150px;
+        }
+        
+        .hero h1 {
+            font-size: 14px;
+            letter-spacing: 2px;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+        }
+        
+        .hero h2 {
+            font-size: 48px;
+            margin-bottom: 30px;
+            font-weight: normal;
+        }
+        
+        .btn {
+            padding: 12px 30px;
+            background-color: transparent;
+            color: white;
+            border: 2px solid white;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .btn:hover {
+            background-color: white;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <section class="hero">
+        <nav>
+            <a href="#">Home</a>
+            <a href="#">Discover</a>
+            <a href="#">Experiences</a>
+            <a href="#">Gallery</a>
+            <a href="#">Find Us</a>
+            <a href="#">Fees</a>
+        </nav>
+        
+        <div class="hero-content">
+            <h1>Discover</h1>
+            <h2>North Lake</h2>
+            <button class="btn">Explore Now</button>
+        </div>
+    </section>
+</body>
+</html>
